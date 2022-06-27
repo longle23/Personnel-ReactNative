@@ -1,28 +1,67 @@
-import React, { Component, useState } from 'react'
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ImageBackground, StatusBar, Dimensions, TextInput, Image, Button, Switch } from 'react-native'
+import React, { Component, useState, useEffect } from 'react'
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ImageBackground, StatusBar, Dimensions, TextInput, Image, Button, Switch, ActivityIndicator, } from 'react-native'
 import 'react-native-gesture-handler'
 import { en, vn } from '../custom/captions'
-// import { Switch } from 'react-native-switch';
 import { config } from '../custom/setting'
 import axios from 'axios'
-import { callAPILogin } from '../api/AuthenAPI'
+import { connect, useDispatch, useSelector } from 'react-redux'
+import loginActions from '../redux/actions/loginActions'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
 
-export default AuthenScreen = ({ navigation }) => {
+export const AuthenScreen = ({ navigation }) => {
     // Set mac dinh khong hien password
     const [getPasswordVisible, setPasswordVisible] = useState(false)
     // Toggle Language
     const [isVN, setIsVN] = useState(true)
     const [taikhoan, onChangeTaiKhoan] = useState("")
     const [matkhau, onChangeMatKhau] = useState("")
-    // Lưu thông tin từ Server trả về
-    const [response, setResponse] = useState(null)
+    // const []
 
-    // console.log('render')
+    const dispatch = useDispatch()
+
+    // State từ Redux
+    const stateLoading = useSelector(state => state.login_loading)
+    const stateSuccess = useSelector(state => state.login_success)
+    const stateError = useSelector(state => state.login_error)
+
+    // const LoginVSsaveToken = async () => {
+    //     console.log('Click')
+
+    //     if (stateSuccess.code === true) {
+    //         navigation.navigate('MainTabs')
+
+    //         AsyncStorage.setItem('token', stateSuccess.message)
+    //         const token = await AsyncStorage.getItem('token')
+    //         console.log('token: ', token)
+    //     }
+    // }
+
+    useEffect(() => {
+        console.log('useEffect..')
+
+        if (stateSuccess.code === true) {
+            navigation.navigate('MainTabs')
+        }
+
+        const saveToken = async () => {
+            try {
+                AsyncStorage.setItem('token', stateSuccess.message)
+                const token = await AsyncStorage.getItem('token')
+                console.log('token: ', token)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        saveToken()
+
+    }, [stateSuccess])
+
     return (
-        <ImageBackground style={{ height: '100%', width: '100%' }} source={require('../images/bg_login.png')} resizeMode='stretch'>
+        <ImageBackground style={{ height: '100%', width: '100%' }} source={require('../images/bg_login.png')} resizeMode='stretch' >
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
                     <View style={styles.toggleLanguage}>
@@ -77,18 +116,30 @@ export default AuthenScreen = ({ navigation }) => {
                         </View>
                     </View>
 
-                    {/* Button dang nhap */}
-                    <TouchableOpacity style={styles.btDangNhap}
-                        // onPress={() => { navigation.navigate('MainTabs') }}>
-                        onPress={() => callAPILogin(taikhoan,matkhau)}>
+                    {/* Thong bao dang nhap */}
+                    {stateSuccess.code === true ? null : <Text style={{ marginLeft: 15, color: 'red' }}>{stateSuccess.message}</Text>}
 
-                        <Text style={styles.textBtDangNhap}>{config.language === "vi" ? vn.Login : en.Login}</Text>
-                    </TouchableOpacity>
+                    {/* Button dang nhap */}
+                    {stateLoading ?
+                        (
+                            <ActivityIndicator size='large' color='grey'></ActivityIndicator>
+                        ) : (
+                            <TouchableOpacity style={styles.btDangNhap}
+                                // onPress={() => { navigation.navigate('MainTabs') }}>
+                                onPress={() => {
+                                    dispatch(loginActions(taikhoan, matkhau))
+                                    // LoginVSsaveToken()
+                                }}>
+
+                                <Text style={styles.textBtDangNhap}>{config.language === "vi" ? vn.Login : en.Login}</Text>
+                            </TouchableOpacity>
+                        )
+                    }
 
                     <Text style={styles.textBanQuyen}>{config.language === "vi" ? vn.textCopyright : en.textCopyright}</Text>
                 </View>
             </SafeAreaView>
-        </ImageBackground >
+        </ImageBackground>
     )
 }
 
@@ -100,7 +151,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderColor: 'white',
         marginTop: 20,
-        marginLeft: 340
+        marginLeft: windowWidth * 0.8
     },
     imgLogin: {
         marginTop: 20,
@@ -173,9 +224,31 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     textBanQuyen: {
+        color: 'black',
         fontSize: 12,
-        marginTop: 110,
+        marginTop: windowHeight * 0.21,
         textAlign: 'center',
         fontWeight: 'bold'
     }
 })
+
+const mapStateToProps = (state) => {
+    console.log("---AuthenScreen state: ", state)
+
+    return {
+        login_loading: state.login_loading,
+        login_success: state.login_success,
+        login_error: state.login_error,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    // return { actions: bindActionCreators(loginActions, dispatch) }
+    // loginActions: async (taikhoan, matkhau) => dispatch(loginActions(taikhoan, matkhau))
+
+    return {
+        loginActions: (taikhoan, matkhau) => { dispatch(loginActions(taikhoan, matkhau)) }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthenScreen)

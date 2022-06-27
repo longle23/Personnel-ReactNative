@@ -21,11 +21,11 @@ const Tab = createBottomTabNavigator();
 
 function MainTabs() {
     return (
-        <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Navigator screenOptions={{ headerShown: false }} tabBarOptions={{ showLabel: false }}>
             <Tab.Screen name="Trang chủ" component={TrangChuScreen} options={{ tabBarIcon: () => <Image source={require('../images/home.png')} resizeMode='stretch' style={{ width: 30, height: 30 }} /> }} />
             <Tab.Screen name="Danh sách" component={DanhSachScreen} options={{ tabBarIcon: () => <Image source={require('../images/widget.png')} resizeMode='stretch' style={{ width: 30, height: 30 }} /> }} />
             <Tab.Screen name="Đăng ký" component={DangKyScreen} options={{ tabBarIcon: () => <Image source={require('../images/task.png')} resizeMode='stretch' style={{ width: 30, height: 30 }} /> }} />
-            <Tab.Screen name="Phê duyệt" component={PheDuyetScreen} options={{ tabBarIcon: () => <Image source={require('../images/person.png')} resizeMode='stretch' style={{ width: 30, height: 30 }} /> }} />
+            <Tab.Screen  name="Phê duyệt" component={PheDuyetScreen} options={{ tabBarIcon: () => <Image source={require('../images/person.png')} resizeMode='stretch' style={{ width: 30, height: 30 }} /> }} />
         </ Tab.Navigator>
     );
 }
@@ -44,15 +44,13 @@ const HomeDrawer = () => {
 export default RootComponent = function () {
     return (
         // Các trang bên trong sẽ lấy được thông tin store, thì trong store sẽ có reducers
-        // <Provider store={store}>
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName='AuthenScreen' screenOptions={{ headerShown: false }}>
-                <Stack.Screen name='AuthenScreen' component={AuthenScreen} />
-                <Stack.Screen name='MainTabs' component={MainTabs} />
-                <Stack.Screen name='HomeDrawer' component={HomeDrawer} />
-                {/* <Stack.Screen name='MainScreen' component={MainScreen} /> */}
-            </Stack.Navigator>
-        </NavigationContainer>
-        // </Provider>
+        <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName='AuthenScreen' screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name='AuthenScreen' component={AuthenScreen} />
+                    <Stack.Screen name='MainTabs' component={MainTabs} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
     )
 }

@@ -1,21 +1,24 @@
+import axios from 'axios'
 const URL_Login = 'https://ihrp2.fis.vn/bke_v33_standard_poc/api/v1/login'
 
-export const callAPILogin = async () => {
+export function callAPILogin(taikhoan, matkhau) {
+    console.log('tk mk request API: ', taikhoan, matkhau)
+
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            username: 'admin.fpt2',
-            Password: '123456A@a',
+            username: taikhoan,
+            Password: matkhau,
             OS: '1',
-            DeviceID: 'otiur08lf89756fdifdifjdf[dufd',
+            DeviceID: 'otiur08laf89756fdifdifjdf[dufd',
             Version: 25,
             LangID: 'VN'
         })
     }
-    fetch(URL_Login, requestOptions)
-        .then(response => response.json())
-        .then(data => console.log('res: ', data));
+    return fetch(URL_Login, requestOptions)
+        .then((response) => response.json())
+        .catch((error) => console.log("Error: ", error))
 }
 
 // const callAPILogin = async () => {
@@ -35,20 +38,17 @@ export const callAPILogin = async () => {
 //     }
 // }
 
-// const callAPILogin = () => {
+// export default callAPILogin = (taikhoan, matkhau) => {
 //     console.log("Calling API Login")
+
 //     axios.post(URL_Login, {
-//         username: 'admin.fpt2',
-//         Password: '123456A@a',
+//         username: taikhoan,
+//         Password: matkhau,
 //         OS: '1',
 //         DeviceID: 'otiur08lf89756fdifdifjdf[dufd',
 //         Version: 25,
 //         LangID: 'VN'
 //     })
-//         .then(response => {
-//             console.log(response)
-//         })
-//         .catch(error => {
-//             console.log(error)
-//         })
+//         .then(response => { console.log(response) })
+//         .catch(error => { console.log(error) })
 // }

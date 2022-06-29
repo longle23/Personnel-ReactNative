@@ -18,7 +18,6 @@ export const AuthenScreen = ({ navigation }) => {
     const [isVN, setIsVN] = useState(true)
     const [taikhoan, onChangeTaiKhoan] = useState("")
     const [matkhau, onChangeMatKhau] = useState("")
-    // const []
 
     const dispatch = useDispatch()
 
@@ -26,18 +25,6 @@ export const AuthenScreen = ({ navigation }) => {
     const stateLoading = useSelector(state => state.login_loading)
     const stateSuccess = useSelector(state => state.login_success)
     const stateError = useSelector(state => state.login_error)
-
-    // const LoginVSsaveToken = async () => {
-    //     console.log('Click')
-
-    //     if (stateSuccess.code === true) {
-    //         navigation.navigate('MainTabs')
-
-    //         AsyncStorage.setItem('token', stateSuccess.message)
-    //         const token = await AsyncStorage.getItem('token')
-    //         console.log('token: ', token)
-    //     }
-    // }
 
     useEffect(() => {
         console.log('useEffect..')
@@ -226,7 +213,7 @@ const styles = StyleSheet.create({
     textBanQuyen: {
         color: 'black',
         fontSize: 12,
-        marginTop: windowHeight * 0.21,
+        marginTop: windowHeight * 0.18,
         textAlign: 'center',
         fontWeight: 'bold'
     }

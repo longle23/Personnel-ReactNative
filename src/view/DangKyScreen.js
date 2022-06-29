@@ -15,7 +15,7 @@ export default DangKyScreen = ({ navigation }) => {
 
             {/* Body */}
             <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontSize: 30 }}>Dang Ky Srceen</Text>
+                <Text style={{ fontSize: 30 }}>Srceen 3</Text>
                 <TouchableOpacity style={{ width: '50%', height: 50, borderWidth: 1, marginTop: 50, alignItems: 'center', borderRadius: 100 }}
                     onPress={() => { navigation.popToTop() }}>
                     <Text style={{ fontSize: 25, fontWeight: '500' }}>Logout</Text>

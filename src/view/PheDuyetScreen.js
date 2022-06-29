@@ -15,7 +15,7 @@ export default PheDuyetScreen = ({ navigation }) => {
 
             {/* Body */}
             <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontSize: 30 }}>Phe Duyet Srceen</Text>
+                <Text style={{ fontSize: 30 }}>Srceen 4</Text>
                 <TouchableOpacity style={{ width: '50%', height: 50, borderWidth: 1, marginTop: 50, alignItems: 'center', borderRadius: 100 }}
                     onPress={() => { navigation.popToTop() }}>
                     <Text style={{ fontSize: 25, fontWeight: '500' }}>Logout</Text>
